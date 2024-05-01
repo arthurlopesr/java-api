@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+
+  mysql:
+    container_name: mysql
+    image: mysql
+    ports:
+      - 3306:3306
+    restart: always
+    environment:
+      MYSQL_DATABASE: RASPLUS
+      MYSQL_ROOT_PASSWORD: senha123
+      MYSQL_USER: arthur
+      MYSQL_PASSWORD: senha123
