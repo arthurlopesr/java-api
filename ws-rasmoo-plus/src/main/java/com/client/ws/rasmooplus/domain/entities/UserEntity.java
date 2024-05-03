@@ -27,11 +27,11 @@ public class UserEntity implements Serializable {
     @Column(name = "dt_expiration")
     private LocalDate dtExpiration;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_type_id")
     private UserTypeEntity userType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subscriptions_type_id")
     private SubscriptionsTypeEntity subscriptionsType;
 
