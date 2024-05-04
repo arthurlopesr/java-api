@@ -48,7 +48,15 @@ public class SubscriptionTypeUseCaseImpl implements SubscriptionTypeUseCase {
 
     @Override
     public SubscriptionsTypeEntity update(Long id, SubscriptionTypeDTO subscriptionTypeDTO) {
-        return null;
+        getSubscriptionTypeById(id);
+        return subscriptionTypeRepository.save(SubscriptionsTypeEntity.builder()
+                .subscriptionsTypeId(id)
+                .name(subscriptionTypeDTO.getName())
+                .accessMonths(subscriptionTypeDTO.getAccessMonths())
+                .price(subscriptionTypeDTO.getPrice())
+                .productKey(subscriptionTypeDTO.getProductKey())
+                .build()
+        );
     }
 
     @Override

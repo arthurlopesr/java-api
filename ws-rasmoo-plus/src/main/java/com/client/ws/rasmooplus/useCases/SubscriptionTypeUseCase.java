@@ -13,7 +13,7 @@ public interface SubscriptionTypeUseCase {
 
     SubscriptionsTypeEntity create(SubscriptionTypeDTO subscriptionsTypeDto);
 
-    SubscriptionsTypeEntity update(Long id, SubscriptionsTypeEntity subscriptionsType);
+    SubscriptionsTypeEntity update(Long id, SubscriptionTypeDTO subscriptionsTypeDto);
 
     void delete(Long id);
 
