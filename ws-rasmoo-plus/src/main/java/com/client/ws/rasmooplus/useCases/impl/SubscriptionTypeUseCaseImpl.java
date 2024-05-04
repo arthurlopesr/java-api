@@ -28,11 +28,7 @@ public class SubscriptionTypeUseCaseImpl implements SubscriptionTypeUseCase {
 
     @Override
     public SubscriptionsTypeEntity findById(Long id) {
-        Optional<SubscriptionsTypeEntity> optionalSubscriptionsTypeEntity = subscriptionTypeRepository.findById(id);
-        if(optionalSubscriptionsTypeEntity.isEmpty()) {
-            throw new NotFoundException("SubscriptionType not found");
-        }
-        return subscriptionTypeRepository.findById(id).get();
+        return getSubscriptionTypeById(id);
     }
 
     @Override
@@ -41,21 +37,30 @@ public class SubscriptionTypeUseCaseImpl implements SubscriptionTypeUseCase {
             throw new BadRequestException("SubscriptionsTypeId most be null");
         }
         return subscriptionTypeRepository.save(SubscriptionsTypeEntity.builder()
-                        .subscriptionsTypeId(subscriptionTypeDTO.getSubscriptionsTypeId())
-                        .name(subscriptionTypeDTO.getName())
-                        .accessMonths(subscriptionTypeDTO.getAccessMonths())
-                        .price(subscriptionTypeDTO.getPrice())
-                        .productKey(subscriptionTypeDTO.getProductKey())
-                .build());
+                .subscriptionsTypeId(subscriptionTypeDTO.getSubscriptionsTypeId())
+                .name(subscriptionTypeDTO.getName())
+                .accessMonths(subscriptionTypeDTO.getAccessMonths())
+                .price(subscriptionTypeDTO.getPrice())
+                .productKey(subscriptionTypeDTO.getProductKey())
+                .build()
+        );
     }
 
     @Override
-    public SubscriptionsTypeEntity update(Long id, SubscriptionsTypeEntity subscriptionsType) {
+    public SubscriptionsTypeEntity update(Long id, SubscriptionTypeDTO subscriptionTypeDTO) {
         return null;
     }
 
     @Override
     public void delete(Long id) {
 
+    }
+
+    private SubscriptionsTypeEntity getSubscriptionTypeById(Long id) {
+        Optional<SubscriptionsTypeEntity> optionalSubscriptionsTypeEntity = subscriptionTypeRepository.findById(id);
+        if (optionalSubscriptionsTypeEntity.isEmpty()) {
+            throw new NotFoundException("SubscriptionType not found");
+        }
+        return optionalSubscriptionsTypeEntity.get();
     }
 }
