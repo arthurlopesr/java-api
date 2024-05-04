@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.repositories;
+package com.client.ws.rasmooplus.infra.repositories;
 
 import com.client.ws.rasmooplus.domain.entities.UserPaymentInfoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
