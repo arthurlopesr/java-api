@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ResourceHandler {
-    
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> notFoundException(NotFoundException notFoundException) {
         String errorMessage = notFoundException.getMessage();

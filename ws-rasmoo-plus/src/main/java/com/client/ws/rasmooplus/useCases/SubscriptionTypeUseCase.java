@@ -1,6 +1,7 @@
 package com.client.ws.rasmooplus.useCases;
 
 import com.client.ws.rasmooplus.domain.entities.SubscriptionsTypeEntity;
+import com.client.ws.rasmooplus.dto.SubscriptionTypeDTO;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface SubscriptionTypeUseCase {
 
     SubscriptionsTypeEntity findById(Long id);
 
-    SubscriptionsTypeEntity create(SubscriptionsTypeEntity subscriptionsType);
+    SubscriptionsTypeEntity create(SubscriptionTypeDTO subscriptionsTypeDto);
 
     SubscriptionsTypeEntity update(Long id, SubscriptionsTypeEntity subscriptionsType);
 

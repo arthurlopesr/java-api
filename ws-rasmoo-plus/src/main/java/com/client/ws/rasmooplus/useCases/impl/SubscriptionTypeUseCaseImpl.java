@@ -2,6 +2,7 @@ package com.client.ws.rasmooplus.useCases.impl;
 
 import com.client.ws.rasmooplus.domain.entities.SubscriptionsTypeEntity;
 import com.client.ws.rasmooplus.domain.excepions.NotFoundException;
+import com.client.ws.rasmooplus.dto.SubscriptionTypeDTO;
 import com.client.ws.rasmooplus.infra.repositories.SubscriptionTypeRepository;
 import com.client.ws.rasmooplus.useCases.SubscriptionTypeUseCase;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,14 @@ public class SubscriptionTypeUseCaseImpl implements SubscriptionTypeUseCase {
     }
 
     @Override
-    public SubscriptionsTypeEntity create(SubscriptionsTypeEntity subscriptionsType) {
-        return null;
+    public SubscriptionsTypeEntity create(SubscriptionTypeDTO subscriptionTypeDTO) {
+        return subscriptionTypeRepository.save(SubscriptionsTypeEntity.builder()
+                        .subscriptionsTypeId(subscriptionTypeDTO.getSubscriptionsTypeId())
+                        .name(subscriptionTypeDTO.getName())
+                        .accessMonths(subscriptionTypeDTO.getAccessMonths())
+                        .price(subscriptionTypeDTO.getPrice())
+                        .productKey(subscriptionTypeDTO.getProductKey())
+                .build());
     }
 
     @Override
