@@ -4,6 +4,7 @@ import com.client.ws.rasmooplus.domain.entities.SubscriptionsTypeEntity;
 import com.client.ws.rasmooplus.domain.excepions.BadRequestException;
 import com.client.ws.rasmooplus.domain.excepions.NotFoundException;
 import com.client.ws.rasmooplus.dto.SubscriptionTypeDTO;
+import com.client.ws.rasmooplus.factory.SubscriptionTypeFactory;
 import com.client.ws.rasmooplus.infra.repositories.SubscriptionTypeRepository;
 import com.client.ws.rasmooplus.useCases.SubscriptionTypeUseCase;
 import org.springframework.stereotype.Service;
@@ -36,27 +37,14 @@ public class SubscriptionTypeUseCaseImpl implements SubscriptionTypeUseCase {
         if (Objects.nonNull(subscriptionTypeDTO.getSubscriptionsTypeId())) {
             throw new BadRequestException("SubscriptionsTypeId most be null");
         }
-        return subscriptionTypeRepository.save(SubscriptionsTypeEntity.builder()
-                .subscriptionsTypeId(subscriptionTypeDTO.getSubscriptionsTypeId())
-                .name(subscriptionTypeDTO.getName())
-                .accessMonths(subscriptionTypeDTO.getAccessMonths())
-                .price(subscriptionTypeDTO.getPrice())
-                .productKey(subscriptionTypeDTO.getProductKey())
-                .build()
-        );
+        return subscriptionTypeRepository.save(SubscriptionTypeFactory.fromDtoToEntity(subscriptionTypeDTO));
     }
 
     @Override
     public SubscriptionsTypeEntity update(Long id, SubscriptionTypeDTO subscriptionTypeDTO) {
         getSubscriptionTypeById(id);
-        return subscriptionTypeRepository.save(SubscriptionsTypeEntity.builder()
-                .subscriptionsTypeId(id)
-                .name(subscriptionTypeDTO.getName())
-                .accessMonths(subscriptionTypeDTO.getAccessMonths())
-                .price(subscriptionTypeDTO.getPrice())
-                .productKey(subscriptionTypeDTO.getProductKey())
-                .build()
-        );
+        subscriptionTypeDTO.setSubscriptionsTypeId(id);
+        return subscriptionTypeRepository.save(SubscriptionTypeFactory.fromDtoToEntity(subscriptionTypeDTO));
     }
 
     @Override
