@@ -3,6 +3,7 @@ package com.client.ws.rasmooplus.controllers;
 import com.client.ws.rasmooplus.domain.entities.SubscriptionsTypeEntity;
 import com.client.ws.rasmooplus.dto.SubscriptionTypeDTO;
 import com.client.ws.rasmooplus.useCases.SubscriptionTypeUseCase;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class SubscriptionTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<SubscriptionsTypeEntity> create(@RequestBody SubscriptionTypeDTO subscriptionsTypeDto) {
+    public ResponseEntity<SubscriptionsTypeEntity> create(@Valid @RequestBody SubscriptionTypeDTO subscriptionsTypeDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionTypeUseCase.create(subscriptionsTypeDto));
     }
 
