@@ -61,7 +61,8 @@ public class SubscriptionTypeUseCaseImpl implements SubscriptionTypeUseCase {
 
     @Override
     public void delete(Long id) {
-
+        getSubscriptionTypeById(id);
+        subscriptionTypeRepository.deleteById(id);
     }
 
     private SubscriptionsTypeEntity getSubscriptionTypeById(Long id) {
