@@ -1,11 +1,13 @@
 package com.client.ws.rasmooplus.useCases.impl;
 
 import com.client.ws.rasmooplus.domain.entities.SubscriptionsTypeEntity;
+import com.client.ws.rasmooplus.domain.excepions.NotFoundException;
 import com.client.ws.rasmooplus.infra.repositories.SubscriptionTypeRepository;
 import com.client.ws.rasmooplus.useCases.SubscriptionTypeUseCase;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SubscriptionTypeUseCaseImpl implements SubscriptionTypeUseCase {
@@ -23,7 +25,11 @@ public class SubscriptionTypeUseCaseImpl implements SubscriptionTypeUseCase {
 
     @Override
     public SubscriptionsTypeEntity findById(Long id) {
-        return null;
+        Optional<SubscriptionsTypeEntity> optionalSubscriptionsTypeEntity = subscriptionTypeRepository.findById(id);
+        if(optionalSubscriptionsTypeEntity.isEmpty()) {
+            throw new NotFoundException("SubscriptionType not found");
+        }
+        return subscriptionTypeRepository.findById(id).get();
     }
 
     @Override
