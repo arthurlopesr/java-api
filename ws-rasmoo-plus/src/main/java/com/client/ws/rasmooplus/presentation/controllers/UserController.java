@@ -27,4 +27,9 @@ public class UserController {
     public ResponseEntity<List<UserEntity>> findAll() {
         return ResponseEntity.status(HttpStatus.OK).body(userUseCase.findAll());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserEntity> findById(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(userUseCase.findById(id));
+    }
 }

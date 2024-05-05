@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserUseCaseImpl implements UserUseCase {
@@ -44,5 +45,17 @@ public class UserUseCaseImpl implements UserUseCase {
 
     public List<UserEntity> findAll() {
         return userRepository.findAll();
+    }
+
+    public UserEntity findById(Long id) {
+        return getUserBYId(id);
+    }
+
+    private UserEntity getUserBYId(Long id) {
+        Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
+        if (optionalUserEntity.isEmpty()) {
+            throw new NotFoundException("UserEntity not found");
+        }
+        return optionalUserEntity.get();
     }
 }

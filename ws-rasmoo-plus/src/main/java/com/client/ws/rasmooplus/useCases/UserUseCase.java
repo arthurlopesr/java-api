@@ -9,4 +9,6 @@ public interface UserUseCase {
     UserEntity create(UserDTO userDTO);
 
     List<UserEntity> findAll();
+
+    UserEntity findById(Long id);
 }
