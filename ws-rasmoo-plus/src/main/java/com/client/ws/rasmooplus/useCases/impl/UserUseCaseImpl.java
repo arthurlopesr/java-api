@@ -11,6 +11,7 @@ import com.client.ws.rasmooplus.useCases.UserUseCase;
 import com.client.ws.rasmooplus.useCases.factory.UserFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -39,5 +40,9 @@ public class UserUseCaseImpl implements UserUseCase {
         UserTypeEntity userType = userTypeOpt.get();
         UserEntity user = UserFactory.fromDtoToEntity(userDTO, userType, null);
         return userRepository.save(user);
+    }
+
+    public List<UserEntity> findAll() {
+        return userRepository.findAll();
     }
 }
