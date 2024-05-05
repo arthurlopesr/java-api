@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.dto.error;
+package com.client.ws.rasmooplus.presentation.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,7 +1,7 @@
-package com.client.ws.rasmooplus.factory;
+package com.client.ws.rasmooplus.useCases.factory;
 
 import com.client.ws.rasmooplus.domain.entities.SubscriptionsTypeEntity;
-import com.client.ws.rasmooplus.dto.SubscriptionTypeDTO;
+import com.client.ws.rasmooplus.presentation.dto.SubscriptionTypeDTO;
 
 public class SubscriptionTypeFactory {
 

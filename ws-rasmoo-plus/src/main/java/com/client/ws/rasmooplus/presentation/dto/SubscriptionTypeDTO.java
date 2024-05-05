@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.dto;
+package com.client.ws.rasmooplus.presentation.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;

@@ -2,7 +2,7 @@ package com.client.ws.rasmooplus.domain.excepions.handler;
 
 import com.client.ws.rasmooplus.domain.excepions.BadRequestException;
 import com.client.ws.rasmooplus.domain.excepions.NotFoundException;
-import com.client.ws.rasmooplus.dto.error.ErrorResponseDTO;
+import com.client.ws.rasmooplus.presentation.error.ErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
