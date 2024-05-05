@@ -11,4 +11,6 @@ public interface UserUseCase {
     List<UserEntity> findAll();
 
     UserEntity findById(Long id);
+
+    UserEntity update(Long id, UserDTO userDTO);
 }

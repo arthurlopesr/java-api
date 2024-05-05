@@ -51,6 +51,19 @@ public class UserUseCaseImpl implements UserUseCase {
         return getUserBYId(id);
     }
 
+    public UserEntity update(Long id, UserDTO userDTO) {
+        getUserBYId(id);
+        userDTO.setUserId(id);
+        var userTypeOpt = userTypeRepository.findById(userDTO.getUserTypeId());
+
+        if (userTypeOpt.isEmpty()) {
+            throw new NotFoundException("userTypeId not found");
+        }
+
+        UserTypeEntity userType = userTypeOpt.get();
+        return userRepository.save(UserFactory.fromDtoToEntity(userDTO, userType, null));
+    }
+
     private UserEntity getUserBYId(Long id) {
         Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
         if (optionalUserEntity.isEmpty()) {

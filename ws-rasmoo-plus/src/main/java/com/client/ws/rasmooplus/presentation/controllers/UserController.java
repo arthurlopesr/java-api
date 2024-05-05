@@ -32,4 +32,9 @@ public class UserController {
     public ResponseEntity<UserEntity> findById(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userUseCase.findById(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserEntity> update(@PathVariable("id") Long id, @RequestBody UserDTO userDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(userUseCase.update(id, userDTO));
+    }
 }
