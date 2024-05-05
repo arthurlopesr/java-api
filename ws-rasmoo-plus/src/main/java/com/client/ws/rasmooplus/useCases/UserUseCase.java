@@ -13,4 +13,6 @@ public interface UserUseCase {
     UserEntity findById(Long id);
 
     UserEntity update(Long id, UserDTO userDTO);
+
+    void delete(Long id);
 }

@@ -19,7 +19,7 @@ public class UserController {
     private UserUseCase userUseCase;
 
     @PostMapping
-    public ResponseEntity<UserEntity> create(@Valid  @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserEntity> create(@Valid @RequestBody UserDTO userDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userUseCase.create(userDTO));
     }
 
@@ -36,5 +36,11 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserEntity> update(@PathVariable("id") Long id, @RequestBody UserDTO userDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(userUseCase.update(id, userDTO));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        userUseCase.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }

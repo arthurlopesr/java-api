@@ -64,6 +64,11 @@ public class UserUseCaseImpl implements UserUseCase {
         return userRepository.save(UserFactory.fromDtoToEntity(userDTO, userType, null));
     }
 
+    public void delete(Long id) {
+        getUserBYId(id);
+        userRepository.deleteById(id);
+    }
+
     private UserEntity getUserBYId(Long id) {
         Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
         if (optionalUserEntity.isEmpty()) {
