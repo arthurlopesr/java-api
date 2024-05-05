@@ -34,10 +34,10 @@ public class UserEntity implements Serializable {
     private String cpf;
 
     @Column(name = "dt_subscription")
-    private LocalDate dtSubscripton = LocalDate.now();
+    private LocalDate dtSubscription = LocalDate.now();
 
     @Column(name = "dt_expiration")
-    private LocalDate dtExpiration;
+    private LocalDate dtExpiration = LocalDate.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_type_id")
