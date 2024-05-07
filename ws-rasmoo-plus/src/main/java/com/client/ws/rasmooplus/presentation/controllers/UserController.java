@@ -1,6 +1,7 @@
 package com.client.ws.rasmooplus.presentation.controllers;
 
 import com.client.ws.rasmooplus.domain.entities.UserEntity;
+import com.client.ws.rasmooplus.presentation.controllers.doc.UserControllerDoc;
 import com.client.ws.rasmooplus.presentation.dto.UserDTO;
 import com.client.ws.rasmooplus.useCases.UserUseCase;
 import jakarta.validation.Valid;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController implements UserControllerDoc {
 
     @Autowired
     private UserUseCase userUseCase;
