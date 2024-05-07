@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.infra.gateways.communication.dto;
+package com.client.ws.rasmooplus.infra.gateways.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustumerDTO {
+public class CostumerDTO {
     private String id;
 
     private String email;
 
     private String cpf;
 
-    private String fisrtName;
+    private String firstName;
 
     private String lastName;
 

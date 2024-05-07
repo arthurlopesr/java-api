@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.infra.gateways.communication.dto;
+package com.client.ws.rasmooplus.infra.gateways.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
