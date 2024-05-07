@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@Tag(name = "Usuário")
+@Tag(name = "UserController - Operação de CRUD do usuário")
 public interface UserControllerDoc {
     @Operation(summary = "Serviço de criação de um novo usuário")
     @ApiResponses(value = {
