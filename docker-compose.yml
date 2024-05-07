@@ -13,3 +13,19 @@ services:
       MYSQL_ROOT_PASSWORD: senha123
       MYSQL_USER: arthur
       MYSQL_PASSWORD: senha123
+    volumes:
+        - mysql_data_container:/data/db
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: arthur
+      MONGO_INITDB_ROOT_PASSWORD: senha123
+    ports:
+      - 27017:27017
+    volumes:
+        - mongo_data_container:/data/db
+volumes:
+    mysql_data_container:
+    mongo_data_container:
