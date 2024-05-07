@@ -6,6 +6,9 @@ import com.client.ws.rasmooplus.domain.entities.UserTypeEntity;
 import com.client.ws.rasmooplus.presentation.dto.UserDTO;
 
 public class UserFactory {
+    private UserFactory() {
+    }
+
     public static UserEntity fromDtoToEntity(UserDTO userDTO, UserTypeEntity userTypeEntity, SubscriptionsTypeEntity subscriptionsType) {
         return UserEntity.builder()
                 .userId(userDTO.getUserId())

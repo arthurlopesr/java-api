@@ -4,6 +4,8 @@ import com.client.ws.rasmooplus.domain.entities.SubscriptionsTypeEntity;
 import com.client.ws.rasmooplus.presentation.dto.SubscriptionTypeDTO;
 
 public class SubscriptionTypeFactory {
+    private SubscriptionTypeFactory() {
+    }
 
     public static SubscriptionsTypeEntity fromDtoToEntity(SubscriptionTypeDTO subscriptionTypeDTO) {
         return SubscriptionsTypeEntity.builder()
@@ -14,5 +16,4 @@ public class SubscriptionTypeFactory {
                 .productKey(subscriptionTypeDTO.getProductKey())
                 .build();
     }
-
 }

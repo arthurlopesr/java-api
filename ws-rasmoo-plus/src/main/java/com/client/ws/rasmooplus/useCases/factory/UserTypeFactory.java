@@ -4,6 +4,8 @@ import com.client.ws.rasmooplus.domain.entities.UserTypeEntity;
 import com.client.ws.rasmooplus.presentation.dto.UserTypeDTO;
 
 public class UserTypeFactory {
+    private UserTypeFactory() {
+    }
 
     public static UserTypeEntity fromDtoToEntity(UserTypeDTO userTypeDTO) {
         return UserTypeEntity.builder()
