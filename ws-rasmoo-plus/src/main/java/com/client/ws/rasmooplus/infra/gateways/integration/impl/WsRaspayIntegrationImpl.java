@@ -18,16 +18,17 @@ import java.nio.charset.StandardCharsets;
 public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
 
     private RestTemplate restTemplate;
+    private final HttpHeaders headers;
 
     public WsRaspayIntegrationImpl() {
         restTemplate = new RestTemplate();
+        headers = getHttpHeaders();
     }
 
     @Override
     public CostumerDTO createCostumer(CostumerDTO costumerDTO) {
         try {
-            HttpHeaders headers = getHttpHeaders();
-            HttpEntity<CostumerDTO> request = new HttpEntity<>(costumerDTO, headers);
+            HttpEntity<CostumerDTO> request = new HttpEntity<>(costumerDTO, this.headers);
             ResponseEntity<CostumerDTO> response =
                     restTemplate.exchange("http://localhost:8081/ws-raspay/v1/customer", HttpMethod.POST, request, CostumerDTO.class);
             return response.getBody();
@@ -38,7 +39,14 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
 
     @Override
     public OrderDTO createOrder(OrderDTO orderDTO) {
-        return null;
+        try {
+            HttpEntity<OrderDTO> request = new HttpEntity<>(orderDTO, this.headers);
+            ResponseEntity<OrderDTO> response =
+                    restTemplate.exchange("http://localhost:8081/ws-raspay/v1/order", HttpMethod.POST, request, OrderDTO.class);
+            return response.getBody();
+        } catch (Exception error) {
+            throw error;
+        }
     }
 
     @Override
