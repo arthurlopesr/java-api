@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class PaymentDTO {
     private CreditCardDTO creditCard;
 
-    private String custumerId;
+    private String customerId;
 
     private String orderId;
 }
