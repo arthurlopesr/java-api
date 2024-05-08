@@ -25,7 +25,7 @@ class WsRaspayIntegrationImplTest {
 
     @Test
     void createOrder() {
-        OrderDTO orderDTO = new OrderDTO(null, "663abe74cc69af734bd2e915", BigDecimal.ZERO, "MONTH22");
+        OrderDTO orderDTO = new OrderDTO(null, "663ba368d61dac357cfe9975", BigDecimal.ZERO, "MONTH22");
         wsRaspayIntegration.createOrder(orderDTO);
     }
 
@@ -39,7 +39,7 @@ class WsRaspayIntegrationImplTest {
                 "12341234123412341234",
                 2025L
         );
-        PaymentDTO paymentDTO = new PaymentDTO(creditCardDTO, "663abe74cc69af734bd2e915","663b9ab1d61dac357cfe9972");
+        PaymentDTO paymentDTO = new PaymentDTO(creditCardDTO, "663ba368d61dac357cfe9975","663ba3f7d61dac357cfe9978");
         wsRaspayIntegration.processPayment(paymentDTO);
     }
 }
