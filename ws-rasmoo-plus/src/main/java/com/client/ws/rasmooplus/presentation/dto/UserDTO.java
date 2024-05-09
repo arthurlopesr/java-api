@@ -18,7 +18,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class UserDTO {
     private Long userId;
 
