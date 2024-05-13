@@ -26,7 +26,7 @@ public class UserPaymentInfoDTO {
     @Max(value = 12)
     private Long cardExpirationMonth;
 
-    private Long privateExpirationYear;
+    private Long cardExpirationYear;
 
     @Size(min = 3, max = 3, message = "Card Security code must contain 3 characters")
     private String cardSecurityCode;
@@ -36,6 +36,8 @@ public class UserPaymentInfoDTO {
     private Integer instalments;
 
     private LocalDate dtPayment = LocalDate.now();
+
+    private Long installments;
 
     @NotNull(message = "UserId can't be null")
     private Long userId;

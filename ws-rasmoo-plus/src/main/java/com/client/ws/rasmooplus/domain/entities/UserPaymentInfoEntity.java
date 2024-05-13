@@ -26,7 +26,7 @@ public class UserPaymentInfoEntity implements Serializable {
     private Long cardExpirationMonth;
 
     @Column(name = "card_expiration_year")
-    private Long privateExpirationYear;
+    private Long cardExpirationYear;
 
     @Column(name = "card_security_code")
     private String cardSecurityCode;
