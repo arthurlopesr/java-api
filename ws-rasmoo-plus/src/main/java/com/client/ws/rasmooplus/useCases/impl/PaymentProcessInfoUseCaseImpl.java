@@ -57,9 +57,7 @@ public class PaymentProcessInfoUseCaseImpl implements UserPaymentInfoUseCase {
             userPaymentInfoRepository.save(userPaymentInfoInstance);
             mailIntegration.send(user.getEmail(), "User: "+ user.getEmail()+"- Senha: teste", "Acesso Liberado");
         }
-        //enviar email de criação de conta
-        //retornar sucesso ou falha
 
-        return null;
+        return false;
     }
 }

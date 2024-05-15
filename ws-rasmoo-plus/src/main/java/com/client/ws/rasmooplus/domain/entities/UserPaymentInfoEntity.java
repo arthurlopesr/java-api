@@ -33,7 +33,8 @@ public class UserPaymentInfoEntity implements Serializable {
 
     private BigDecimal price;
 
-    private Integer instalments;
+    @Column(name = "installments")
+    private Long installments;
 
     @Column(name = "dt_payment")
     private LocalDate dtPayment;
