@@ -18,6 +18,7 @@ public class UserPaymentInfoFactory {
                 .cardSecurityCode(userPaymentInfoDTO.getCardSecurityCode())
                 .price(userPaymentInfoDTO.getPrice())
                 .dtPayment(userPaymentInfoDTO.getDtPayment())
+                .installments(userPaymentInfoDTO.getInstallments())
                 .user(user)
                 .build();
     }
