@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-
-import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +12,7 @@ import java.io.Serializable;
 @Builder
 @Table(name = "user_type")
 @Entity()
-public class UserTypeEntity implements GrantedAuthority {
+public class UserTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_type_id")
@@ -24,9 +21,4 @@ public class UserTypeEntity implements GrantedAuthority {
     private String name;
 
     private String description;
-
-    @Override
-    public String getAuthority() {
-        return name;
-    }
 }
