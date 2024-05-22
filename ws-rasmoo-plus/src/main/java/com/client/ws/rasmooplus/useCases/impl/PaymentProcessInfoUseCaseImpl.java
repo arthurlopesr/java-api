@@ -1,7 +1,9 @@
 package com.client.ws.rasmooplus.useCases.impl;
 
+import com.client.ws.rasmooplus.domain.entities.UserCredentialsEntity;
 import com.client.ws.rasmooplus.domain.entities.UserEntity;
 import com.client.ws.rasmooplus.domain.entities.UserPaymentInfoEntity;
+import com.client.ws.rasmooplus.domain.entities.UserTypeEntity;
 import com.client.ws.rasmooplus.domain.excepions.BusinessException;
 import com.client.ws.rasmooplus.domain.excepions.NotFoundException;
 import com.client.ws.rasmooplus.infra.gateways.dto.CostumerDTO;
@@ -13,8 +15,10 @@ import com.client.ws.rasmooplus.infra.gateways.factory.OrderFactory;
 import com.client.ws.rasmooplus.infra.gateways.factory.PaymentFactory;
 import com.client.ws.rasmooplus.infra.gateways.integration.MailIntegration;
 import com.client.ws.rasmooplus.infra.gateways.integration.WsRaspayIntegration;
+import com.client.ws.rasmooplus.infra.repositories.UserDetailsRepository;
 import com.client.ws.rasmooplus.infra.repositories.UserPaymentInfoRepository;
 import com.client.ws.rasmooplus.infra.repositories.UserRepository;
+import com.client.ws.rasmooplus.infra.repositories.UserTypeRepository;
 import com.client.ws.rasmooplus.presentation.dto.PaymentProcessDTO;
 import com.client.ws.rasmooplus.useCases.UserPaymentInfoUseCase;
 import com.client.ws.rasmooplus.useCases.factory.UserPaymentInfoFactory;
@@ -24,17 +28,29 @@ import java.util.Objects;
 
 @Service
 public class PaymentProcessInfoUseCaseImpl implements UserPaymentInfoUseCase {
+    private final Long Student = 3L;
 
     private final UserRepository userRepository;
     private final UserPaymentInfoRepository userPaymentInfoRepository;
     private final WsRaspayIntegration wsRaspayIntegration;
     private final MailIntegration mailIntegration;
+    private final UserDetailsRepository userDetailsRepository;
+    private final UserTypeRepository userTypeRepository;
 
-    PaymentProcessInfoUseCaseImpl(UserRepository userRepository, UserPaymentInfoRepository userPaymentInfoRepository, WsRaspayIntegration wsRaspayIntegration, MailIntegration mailIntegration) {
+    PaymentProcessInfoUseCaseImpl(
+            UserRepository userRepository,
+            UserPaymentInfoRepository userPaymentInfoRepository,
+            WsRaspayIntegration wsRaspayIntegration,
+            MailIntegration mailIntegration,
+            UserDetailsRepository userDetailsRepository,
+            UserTypeRepository userTypeRepository
+    ) {
         this.userRepository = userRepository;
         this.userPaymentInfoRepository = userPaymentInfoRepository;
         this.wsRaspayIntegration = wsRaspayIntegration;
         this.mailIntegration = mailIntegration;
+        this.userDetailsRepository = userDetailsRepository;
+        this.userTypeRepository = userTypeRepository;
     }
 
     @Override
@@ -50,12 +66,20 @@ public class PaymentProcessInfoUseCaseImpl implements UserPaymentInfoUseCase {
         CostumerDTO createRaspayUser = wsRaspayIntegration.createCostumer(CustomerFactory.factoryCostumer(user));
         OrderDTO createPaymentOrder = wsRaspayIntegration.createOrder(OrderFactory.orderFactoy(createRaspayUser.getId(), processDTO));
         PaymentDTO processPayment = PaymentFactory.build(createRaspayUser.getId(), createPaymentOrder.getId(), CreditCardFactory.build(processDTO.getUserPaymentInfoDTO(), user.getCpf()));
-        Boolean successPayment =  wsRaspayIntegration.processPayment(processPayment);
+        Boolean successPayment = wsRaspayIntegration.processPayment(processPayment);
 
-        if (successPayment) {
+        if (Boolean.TRUE.equals(successPayment)) {
             UserPaymentInfoEntity userPaymentInfoInstance = UserPaymentInfoFactory.fromDtoToEntity(processDTO.getUserPaymentInfoDTO(), user);
             userPaymentInfoRepository.save(userPaymentInfoInstance);
-            mailIntegration.send(user.getEmail(), "User: "+ user.getEmail()+"- Senha: teste", "Acesso Liberado");
+            var userTypeOpt = userTypeRepository.findById(Student);
+
+            if (userTypeOpt.isEmpty()) {
+                throw new NotFoundException("UserType not found");
+            }
+
+            UserCredentialsEntity userCredentials = new UserCredentialsEntity(null, user.getName(), "alunorasmoo", userTypeOpt.get());
+            userDetailsRepository.save(userCredentials);
+            mailIntegration.send(user.getEmail(), "User: " + user.getEmail() + "- Senha: teste", "Acesso Liberado");
         }
 
         return false;
