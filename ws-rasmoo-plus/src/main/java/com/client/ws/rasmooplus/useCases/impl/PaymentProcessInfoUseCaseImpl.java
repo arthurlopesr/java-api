@@ -4,6 +4,7 @@ import com.client.ws.rasmooplus.domain.entities.UserCredentialsEntity;
 import com.client.ws.rasmooplus.domain.entities.UserEntity;
 import com.client.ws.rasmooplus.domain.entities.UserPaymentInfoEntity;
 import com.client.ws.rasmooplus.domain.entities.UserTypeEntity;
+import com.client.ws.rasmooplus.domain.enums.UserTypeEnum;
 import com.client.ws.rasmooplus.domain.excepions.BusinessException;
 import com.client.ws.rasmooplus.domain.excepions.NotFoundException;
 import com.client.ws.rasmooplus.infra.gateways.dto.CostumerDTO;
@@ -22,13 +23,17 @@ import com.client.ws.rasmooplus.infra.repositories.UserTypeRepository;
 import com.client.ws.rasmooplus.presentation.dto.PaymentProcessDTO;
 import com.client.ws.rasmooplus.useCases.UserPaymentInfoUseCase;
 import com.client.ws.rasmooplus.useCases.factory.UserPaymentInfoFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 @Service
 public class PaymentProcessInfoUseCaseImpl implements UserPaymentInfoUseCase {
-    private final Long Student = 3L;
+
+    @Value("${webservices.rasplus.default.password}")
+    private String defaultPassword;
 
     private final UserRepository userRepository;
     private final UserPaymentInfoRepository userPaymentInfoRepository;
@@ -55,6 +60,7 @@ public class PaymentProcessInfoUseCaseImpl implements UserPaymentInfoUseCase {
 
     @Override
     public Boolean process(PaymentProcessDTO processDTO) {
+        var defaultPasswordHashed = new BCryptPasswordEncoder().encode(defaultPassword);
         var userOpt = userRepository.findById(processDTO.getUserPaymentInfoDTO().getUserId());
         if (userOpt.isEmpty()) {
             throw new NotFoundException("User not found");
@@ -71,13 +77,13 @@ public class PaymentProcessInfoUseCaseImpl implements UserPaymentInfoUseCase {
         if (Boolean.TRUE.equals(successPayment)) {
             UserPaymentInfoEntity userPaymentInfoInstance = UserPaymentInfoFactory.fromDtoToEntity(processDTO.getUserPaymentInfoDTO(), user);
             userPaymentInfoRepository.save(userPaymentInfoInstance);
-            var userTypeOpt = userTypeRepository.findById(Student);
+            var userTypeOpt = userTypeRepository.findById(UserTypeEnum.ALUNO.getId());
 
             if (userTypeOpt.isEmpty()) {
                 throw new NotFoundException("UserType not found");
             }
 
-            UserCredentialsEntity userCredentials = new UserCredentialsEntity(null, user.getName(), "alunorasmoo", userTypeOpt.get());
+            UserCredentialsEntity userCredentials = new UserCredentialsEntity(null, user.getEmail(), defaultPasswordHashed, userTypeOpt.get());
             userDetailsRepository.save(userCredentials);
             mailIntegration.send(user.getEmail(), "User: " + user.getEmail() + "- Senha: teste", "Acesso Liberado");
         }
