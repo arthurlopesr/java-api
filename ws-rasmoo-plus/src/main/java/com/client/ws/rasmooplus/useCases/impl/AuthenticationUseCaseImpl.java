@@ -1,6 +1,6 @@
 package com.client.ws.rasmooplus.useCases.impl;
 
-import com.client.ws.rasmooplus.domain.entities.UserCredentialsEntity;
+import com.client.ws.rasmooplus.domain.entities.jpa.UserCredentialsEntity;
 import com.client.ws.rasmooplus.domain.excepions.BadRequestException;
 import com.client.ws.rasmooplus.presentation.dto.LoginDTO;
 import com.client.ws.rasmooplus.presentation.dto.TokenDTO;

@@ -1,7 +1,5 @@
 package com.client.ws.rasmooplus.presentation.dto;
 
-import com.client.ws.rasmooplus.domain.entities.SubscriptionsTypeEntity;
-import com.client.ws.rasmooplus.domain.entities.UserTypeEntity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

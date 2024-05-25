@@ -1,9 +1,8 @@
 package com.client.ws.rasmooplus.useCases.impl;
 
-import com.client.ws.rasmooplus.domain.entities.UserCredentialsEntity;
-import com.client.ws.rasmooplus.domain.entities.UserEntity;
-import com.client.ws.rasmooplus.domain.entities.UserPaymentInfoEntity;
-import com.client.ws.rasmooplus.domain.entities.UserTypeEntity;
+import com.client.ws.rasmooplus.domain.entities.jpa.UserCredentialsEntity;
+import com.client.ws.rasmooplus.domain.entities.jpa.UserEntity;
+import com.client.ws.rasmooplus.domain.entities.jpa.UserPaymentInfoEntity;
 import com.client.ws.rasmooplus.domain.enums.UserTypeEnum;
 import com.client.ws.rasmooplus.domain.excepions.BusinessException;
 import com.client.ws.rasmooplus.domain.excepions.NotFoundException;
@@ -16,7 +15,7 @@ import com.client.ws.rasmooplus.infra.gateways.factory.OrderFactory;
 import com.client.ws.rasmooplus.infra.gateways.factory.PaymentFactory;
 import com.client.ws.rasmooplus.infra.gateways.integration.MailIntegration;
 import com.client.ws.rasmooplus.infra.gateways.integration.WsRaspayIntegration;
-import com.client.ws.rasmooplus.infra.repositories.*;
+import com.client.ws.rasmooplus.infra.repositories.jpa.*;
 import com.client.ws.rasmooplus.presentation.dto.PaymentProcessDTO;
 import com.client.ws.rasmooplus.useCases.UserPaymentInfoUseCase;
 import com.client.ws.rasmooplus.useCases.factory.UserPaymentInfoFactory;

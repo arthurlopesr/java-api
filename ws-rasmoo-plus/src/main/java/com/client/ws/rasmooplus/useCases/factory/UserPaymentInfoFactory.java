@@ -1,7 +1,7 @@
 package com.client.ws.rasmooplus.useCases.factory;
 
-import com.client.ws.rasmooplus.domain.entities.UserEntity;
-import com.client.ws.rasmooplus.domain.entities.UserPaymentInfoEntity;
+import com.client.ws.rasmooplus.domain.entities.jpa.UserEntity;
+import com.client.ws.rasmooplus.domain.entities.jpa.UserPaymentInfoEntity;
 import com.client.ws.rasmooplus.presentation.dto.UserPaymentInfoDTO;
 
 public class UserPaymentInfoFactory {

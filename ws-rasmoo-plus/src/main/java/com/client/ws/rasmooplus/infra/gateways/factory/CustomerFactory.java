@@ -1,6 +1,6 @@
 package com.client.ws.rasmooplus.infra.gateways.factory;
 
-import com.client.ws.rasmooplus.domain.entities.UserEntity;
+import com.client.ws.rasmooplus.domain.entities.jpa.UserEntity;
 import com.client.ws.rasmooplus.infra.gateways.dto.CostumerDTO;
 
 public class CustomerFactory {

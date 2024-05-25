@@ -1,9 +1,9 @@
 package com.client.ws.rasmooplus.useCases.impl;
 
-import com.client.ws.rasmooplus.domain.entities.UserTypeEntity;
+import com.client.ws.rasmooplus.domain.entities.jpa.UserTypeEntity;
 import com.client.ws.rasmooplus.domain.excepions.BadRequestException;
 import com.client.ws.rasmooplus.domain.excepions.NotFoundException;
-import com.client.ws.rasmooplus.infra.repositories.UserTypeRepository;
+import com.client.ws.rasmooplus.infra.repositories.jpa.UserTypeRepository;
 import com.client.ws.rasmooplus.presentation.dto.UserTypeDTO;
 import com.client.ws.rasmooplus.useCases.UserTypeUseCase;
 import com.client.ws.rasmooplus.useCases.factory.UserTypeFactory;

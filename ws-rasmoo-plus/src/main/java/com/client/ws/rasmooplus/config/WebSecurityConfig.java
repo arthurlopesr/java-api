@@ -1,6 +1,6 @@
 package com.client.ws.rasmooplus.config;
 
-import com.client.ws.rasmooplus.infra.repositories.UserDetailsRepository;
+import com.client.ws.rasmooplus.infra.repositories.jpa.UserDetailsRepository;
 import com.client.ws.rasmooplus.useCases.TokenUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

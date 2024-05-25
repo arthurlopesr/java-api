@@ -1,12 +1,10 @@
 package com.client.ws.rasmooplus.presentation.controllers;
 
-import com.client.ws.rasmooplus.domain.entities.SubscriptionsTypeEntity;
+import com.client.ws.rasmooplus.domain.entities.jpa.SubscriptionsTypeEntity;
 import com.client.ws.rasmooplus.presentation.dto.SubscriptionTypeDTO;
 import com.client.ws.rasmooplus.useCases.SubscriptionTypeUseCase;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

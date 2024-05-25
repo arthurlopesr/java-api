@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.domain.entities;
+package com.client.ws.rasmooplus.domain.entities.jpa;
 
 import jakarta.persistence.*;
 import lombok.*;

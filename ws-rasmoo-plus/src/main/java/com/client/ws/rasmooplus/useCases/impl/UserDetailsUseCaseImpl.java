@@ -1,9 +1,9 @@
 package com.client.ws.rasmooplus.useCases.impl;
 
-import com.client.ws.rasmooplus.domain.entities.UserCredentialsEntity;
+import com.client.ws.rasmooplus.domain.entities.jpa.UserCredentialsEntity;
 import com.client.ws.rasmooplus.domain.excepions.BadRequestException;
 import com.client.ws.rasmooplus.domain.excepions.NotFoundException;
-import com.client.ws.rasmooplus.infra.repositories.UserDetailsRepository;
+import com.client.ws.rasmooplus.infra.repositories.jpa.UserDetailsRepository;
 import com.client.ws.rasmooplus.useCases.UserDetailsUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

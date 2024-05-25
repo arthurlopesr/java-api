@@ -1,6 +1,6 @@
 package com.client.ws.rasmooplus.useCases.factory;
 
-import com.client.ws.rasmooplus.domain.entities.UserTypeEntity;
+import com.client.ws.rasmooplus.domain.entities.jpa.UserTypeEntity;
 import com.client.ws.rasmooplus.presentation.dto.UserTypeDTO;
 
 public class UserTypeFactory {
