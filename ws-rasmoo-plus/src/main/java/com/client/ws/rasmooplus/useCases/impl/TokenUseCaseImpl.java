@@ -5,9 +5,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Service
@@ -23,12 +25,13 @@ public class TokenUseCaseImpl implements TokenUseCase {
 
         Date today = new Date();
         Date expirationDate = new Date(today.getTime() + Long.parseLong(expiration));
+        SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
         return Jwts.builder()
                 .setIssuer("API Rasmoo Plus")
                 .setSubject(userId.toString())
                 .setIssuedAt(today)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(secretKey)
                 .compact();
     }
 
@@ -49,6 +52,6 @@ public class TokenUseCaseImpl implements TokenUseCase {
     }
 
     private Jws<Claims> getClaimsJws(String token) {
-        return Jwts.parser().setSigningKey(secret).build().parseClaimsJws(token);
+        return Jwts.parser().setSigningKey(secret).build().parseSignedClaims(token);
     }
 }
