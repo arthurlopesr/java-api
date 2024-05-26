@@ -7,6 +7,7 @@ import com.client.ws.rasmooplus.domain.excepions.NotFoundException;
 import com.client.ws.rasmooplus.infra.gateways.integration.MailIntegration;
 import com.client.ws.rasmooplus.infra.repositories.jpa.UserDetailsRepository;
 import com.client.ws.rasmooplus.infra.repositories.redis.UserRecoveryCodeRepository;
+import com.client.ws.rasmooplus.presentation.dto.UserDetailsDTO;
 import com.client.ws.rasmooplus.useCases.UserDetailsUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -79,6 +80,18 @@ public class UserDetailsUseCaseImpl implements UserDetailsUseCase {
         LocalDateTime now = LocalDateTime.now();
 
         return userRecoveryCode.getCode().equals(recoveryCode) && now.isBefore(timeout);
+    }
+
+    @Override
+    public void updatePasswordByRecoveryCode(UserDetailsDTO userDetailsDTO) {
+        if (recoveryCodeIsValid(userDetailsDTO.getRecoveryCode(), userDetailsDTO.getEmail())) {
+            var userDetails = userDetailsRepository.findByUsername(userDetailsDTO.getEmail());
+            UserCredentialsEntity userCredentials = userDetails.get();
+            userCredentials.setPassword(new BCryptPasswordEncoder().encode(userDetailsDTO.getPassword()));
+            userDetailsRepository.save(userCredentials);
+        } else {
+            throw new NotFoundException("");
+        }
     }
 
     private Optional<UserCredentialsEntity> getUserByUsername(String username) {

@@ -3,6 +3,7 @@ package com.client.ws.rasmooplus.presentation.controllers;
 import com.client.ws.rasmooplus.domain.entities.redis.UserRecoveryCode;
 import com.client.ws.rasmooplus.presentation.dto.LoginDTO;
 import com.client.ws.rasmooplus.presentation.dto.TokenDTO;
+import com.client.ws.rasmooplus.presentation.dto.UserDetailsDTO;
 import com.client.ws.rasmooplus.useCases.AuthenticationUseCase;
 import com.client.ws.rasmooplus.useCases.UserDetailsUseCase;
 import jakarta.validation.Valid;
@@ -36,5 +37,11 @@ public class AuthenticationController {
     public ResponseEntity<?> recoveryCodeIsValid(@RequestParam("recoveryCode") String recoveryCode,
                                                  @RequestParam("email") String email) {
         return ResponseEntity.status(HttpStatus.OK).body(userDetailsUseCase.recoveryCodeIsValid(recoveryCode, email));
+    }
+
+    @PatchMapping("/recovery-code/password")
+    public ResponseEntity<?> updatePasswordByRecoveryCode(@RequestBody @Valid UserDetailsDTO userDetailsDTO) {
+        userDetailsUseCase.updatePasswordByRecoveryCode(userDetailsDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
