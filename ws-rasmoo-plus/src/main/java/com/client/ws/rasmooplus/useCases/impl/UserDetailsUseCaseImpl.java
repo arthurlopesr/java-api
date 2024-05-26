@@ -4,6 +4,7 @@ import com.client.ws.rasmooplus.domain.entities.jpa.UserCredentialsEntity;
 import com.client.ws.rasmooplus.domain.entities.redis.UserRecoveryCode;
 import com.client.ws.rasmooplus.domain.excepions.BadRequestException;
 import com.client.ws.rasmooplus.domain.excepions.NotFoundException;
+import com.client.ws.rasmooplus.infra.gateways.integration.MailIntegration;
 import com.client.ws.rasmooplus.infra.repositories.jpa.UserDetailsRepository;
 import com.client.ws.rasmooplus.infra.repositories.redis.UserRecoveryCodeRepository;
 import com.client.ws.rasmooplus.useCases.UserDetailsUseCase;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -22,28 +25,54 @@ public class UserDetailsUseCaseImpl implements UserDetailsUseCase {
     @Autowired
     private UserRecoveryCodeRepository userRecoveryCodeRepository;
 
+    @Autowired
+    private MailIntegration mailIntegration;
+
     @Override
     public UserCredentialsEntity loadUserByUsernameAndPass(String username, String pass) {
+        var userCredentialsOpt = getUserByUsername(username);
+        UserCredentialsEntity userCredentials = userCredentialsOpt.get();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        return getUserCredentials(pass, encoder, userCredentials);
+    }
+
+    @Override
+    public void sendRecoveryCode(String email) {
+        String code = String.format("%04d", new Random().nextInt(10000));
+        UserRecoveryCode userRecoveryCode;
+        var userRecoveryCodeOpt = userRecoveryCodeRepository.findByEmail(email);
+
+        if (userRecoveryCodeOpt.isEmpty()) {
+            var userDetails = userDetailsRepository.findByUsername(email);
+
+            if (userDetails.isEmpty()) {
+                throw new NotFoundException("User not found");
+            }
+
+            userRecoveryCode = new UserRecoveryCode();
+            userRecoveryCode.setEmail(email);
+        } else {
+            userRecoveryCode = userRecoveryCodeOpt.get();
+        }
+        userRecoveryCode.setCode(code);
+        userRecoveryCode.setCreatedAt(LocalDateTime.now());
+        userRecoveryCodeRepository.save(userRecoveryCode);
+        mailIntegration.send(email, "Código de recuperação: "+code, "Código de reuperação de conta");
+    }
+
+    private Optional<UserCredentialsEntity> getUserByUsername(String username) {
         var userCredentialsOpt = userDetailsRepository.findByUsername(username);
         if (userCredentialsOpt.isEmpty()) {
             throw new NotFoundException("User not found");
         }
+        return userCredentialsOpt;
+    }
 
-        UserCredentialsEntity userCredentials = userCredentialsOpt.get();
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
+    private static UserCredentialsEntity getUserCredentials(String pass, BCryptPasswordEncoder encoder, UserCredentialsEntity userCredentials) {
         if (encoder.matches(pass, userCredentials.getPassword())) {
             return userCredentials;
         }
-
         throw new BadRequestException("Invalid username or password");
-    }
-
-    @Override
-    public Object sendRecoveryCode(String email) {
-        String code = String.format("%04d", new Random().nextInt(10000));
-
-        userRecoveryCodeRepository.save(UserRecoveryCode.builder().code(code).build());
-        return null;
     }
 }

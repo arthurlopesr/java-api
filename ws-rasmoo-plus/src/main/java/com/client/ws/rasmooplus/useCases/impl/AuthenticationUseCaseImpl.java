@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationUseCaseImpl implements AuthenticationUseCase {
     @Autowired
-    private UserDetailsUseCase userDetailsService;
+    private UserDetailsUseCase userDetailsUseCase;
 
     @Autowired
     private TokenUseCase tokenUseCase;
@@ -21,7 +21,7 @@ public class AuthenticationUseCaseImpl implements AuthenticationUseCase {
     @Override
     public TokenDTO auth(LoginDTO dto) {
         try {
-            UserCredentialsEntity userCredentials = userDetailsService.loadUserByUsernameAndPass(dto.getUsername(), dto.getPassword());
+            UserCredentialsEntity userCredentials = userDetailsUseCase.loadUserByUsernameAndPass(dto.getUsername(), dto.getPassword());
             String token = tokenUseCase.getToken(userCredentials.getUserCredentialsId());
             return TokenDTO.builder().token(token).type("Bearer").build();
         } catch (Exception e) {
