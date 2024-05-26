@@ -9,6 +9,7 @@ import com.client.ws.rasmooplus.infra.repositories.jpa.UserDetailsRepository;
 import com.client.ws.rasmooplus.infra.repositories.redis.UserRecoveryCodeRepository;
 import com.client.ws.rasmooplus.useCases.UserDetailsUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,11 @@ import java.util.Random;
 
 @Service
 public class UserDetailsUseCaseImpl implements UserDetailsUseCase {
+
+    @Value("${webservices.rasplus.redis.recoverycode.timeout}")
+    private String recoveryCodeTimeout;
+
+    private static final String userNotFound = "User not found!";
 
     @Autowired
     private UserDetailsRepository userDetailsRepository;
@@ -47,7 +53,7 @@ public class UserDetailsUseCaseImpl implements UserDetailsUseCase {
             var userDetails = userDetailsRepository.findByUsername(email);
 
             if (userDetails.isEmpty()) {
-                throw new NotFoundException("User not found");
+                throw new NotFoundException(userNotFound);
             }
 
             userRecoveryCode = new UserRecoveryCode();
@@ -61,10 +67,24 @@ public class UserDetailsUseCaseImpl implements UserDetailsUseCase {
         mailIntegration.send(email, "Código de recuperação: "+code, "Código de reuperação de conta");
     }
 
+    @Override
+    public boolean recoveryCodeIsValid(String recoveryCode, String email) {
+        var userRecoveryCodeOpt = userRecoveryCodeRepository.findByEmail(email);
+        if (userRecoveryCodeOpt.isEmpty()) {
+            throw new NotFoundException(userNotFound);
+        }
+
+        UserRecoveryCode userRecoveryCode = userRecoveryCodeOpt.get();
+        LocalDateTime timeout = userRecoveryCode.getCreatedAt().plusMinutes(Long.parseLong(recoveryCodeTimeout));
+        LocalDateTime now = LocalDateTime.now();
+
+        return userRecoveryCode.getCode().equals(recoveryCode) && now.isBefore(timeout);
+    }
+
     private Optional<UserCredentialsEntity> getUserByUsername(String username) {
         var userCredentialsOpt = userDetailsRepository.findByUsername(username);
         if (userCredentialsOpt.isEmpty()) {
-            throw new NotFoundException("User not found");
+            throw new NotFoundException(userNotFound);
         }
         return userCredentialsOpt;
     }

@@ -6,4 +6,6 @@ public interface UserDetailsUseCase {
     UserCredentialsEntity loadUserByUsernameAndPass(String username, String password);
 
     void sendRecoveryCode(String email);
+
+    boolean recoveryCodeIsValid(String recoveryCode, String email);
 }
