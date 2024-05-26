@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RecoveryCode {
+public class UserRecoveryCode {
 
     @Id
-    private String recoveryCodeId;
+    private String id;
 
     private String email;
 
