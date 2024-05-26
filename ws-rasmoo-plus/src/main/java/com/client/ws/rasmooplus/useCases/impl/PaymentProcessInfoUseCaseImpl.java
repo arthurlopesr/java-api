@@ -6,6 +6,7 @@ import com.client.ws.rasmooplus.domain.entities.jpa.UserPaymentInfoEntity;
 import com.client.ws.rasmooplus.domain.enums.UserTypeEnum;
 import com.client.ws.rasmooplus.domain.excepions.BusinessException;
 import com.client.ws.rasmooplus.domain.excepions.NotFoundException;
+import com.client.ws.rasmooplus.domain.utils.PasswordUtils;
 import com.client.ws.rasmooplus.infra.gateways.dto.CostumerDTO;
 import com.client.ws.rasmooplus.infra.gateways.dto.OrderDTO;
 import com.client.ws.rasmooplus.infra.gateways.dto.PaymentDTO;
@@ -20,7 +21,6 @@ import com.client.ws.rasmooplus.presentation.dto.PaymentProcessDTO;
 import com.client.ws.rasmooplus.useCases.UserPaymentInfoUseCase;
 import com.client.ws.rasmooplus.useCases.factory.UserPaymentInfoFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -59,7 +59,7 @@ public class PaymentProcessInfoUseCaseImpl implements UserPaymentInfoUseCase {
 
     @Override
     public Boolean process(PaymentProcessDTO processDTO) {
-        var defaultPasswordHashed = new BCryptPasswordEncoder().encode(defaultPassword);
+        var defaultPasswordHashed = PasswordUtils.encode(defaultPassword);
         var userOpt = userRepository.findById(processDTO.getUserPaymentInfoDTO().getUserId());
         if (userOpt.isEmpty()) {
             throw new NotFoundException("User not found");

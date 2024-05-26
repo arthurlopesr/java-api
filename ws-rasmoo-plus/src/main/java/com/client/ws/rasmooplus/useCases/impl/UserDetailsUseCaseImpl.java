@@ -4,6 +4,7 @@ import com.client.ws.rasmooplus.domain.entities.jpa.UserCredentialsEntity;
 import com.client.ws.rasmooplus.domain.entities.redis.UserRecoveryCode;
 import com.client.ws.rasmooplus.domain.excepions.BadRequestException;
 import com.client.ws.rasmooplus.domain.excepions.NotFoundException;
+import com.client.ws.rasmooplus.domain.utils.PasswordUtils;
 import com.client.ws.rasmooplus.infra.gateways.integration.MailIntegration;
 import com.client.ws.rasmooplus.infra.repositories.jpa.UserDetailsRepository;
 import com.client.ws.rasmooplus.infra.repositories.redis.UserRecoveryCodeRepository;
@@ -11,7 +12,6 @@ import com.client.ws.rasmooplus.presentation.dto.UserDetailsDTO;
 import com.client.ws.rasmooplus.useCases.UserDetailsUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,9 +39,8 @@ public class UserDetailsUseCaseImpl implements UserDetailsUseCase {
     public UserCredentialsEntity loadUserByUsernameAndPass(String username, String pass) {
         var userCredentialsOpt = getUserByUsername(username);
         UserCredentialsEntity userCredentials = userCredentialsOpt.get();
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        return getUserCredentials(pass, encoder, userCredentials);
+        return getUserCredentials(pass, userCredentials);
     }
 
     @Override
@@ -87,7 +86,7 @@ public class UserDetailsUseCaseImpl implements UserDetailsUseCase {
         if (recoveryCodeIsValid(userDetailsDTO.getRecoveryCode(), userDetailsDTO.getEmail())) {
             var userDetails = userDetailsRepository.findByUsername(userDetailsDTO.getEmail());
             UserCredentialsEntity userCredentials = userDetails.get();
-            userCredentials.setPassword(new BCryptPasswordEncoder().encode(userDetailsDTO.getPassword()));
+            userCredentials.setPassword(PasswordUtils.encode(userDetailsDTO.getPassword()));
             userDetailsRepository.save(userCredentials);
         } else {
             throw new NotFoundException("");
@@ -102,8 +101,8 @@ public class UserDetailsUseCaseImpl implements UserDetailsUseCase {
         return userCredentialsOpt;
     }
 
-    private static UserCredentialsEntity getUserCredentials(String pass, BCryptPasswordEncoder encoder, UserCredentialsEntity userCredentials) {
-        if (encoder.matches(pass, userCredentials.getPassword())) {
+    private static UserCredentialsEntity getUserCredentials(String pass, UserCredentialsEntity userCredentials) {
+        if (PasswordUtils.matches(pass, userCredentials.getPassword())) {
             return userCredentials;
         }
         throw new BadRequestException("Invalid username or password");
