@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.useCase;
+package com.client.ws.rasmooplus.useCases;
 
 import com.client.ws.rasmooplus.domain.entities.jpa.UserTypeEntity;
 import com.client.ws.rasmooplus.infra.repositories.jpa.UserTypeRepository;
