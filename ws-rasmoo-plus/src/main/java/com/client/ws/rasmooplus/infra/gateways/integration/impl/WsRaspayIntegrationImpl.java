@@ -33,8 +33,8 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntegration {
     private final RestTemplate restTemplate;
     private final HttpHeaders headers;
 
-    public WsRaspayIntegrationImpl() {
-        restTemplate = new RestTemplate();
+    public WsRaspayIntegrationImpl(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
         headers = getHttpHeaders();
     }
 

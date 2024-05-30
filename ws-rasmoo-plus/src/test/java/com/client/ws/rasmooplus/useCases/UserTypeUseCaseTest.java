@@ -23,11 +23,13 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -176,7 +178,7 @@ class UserTypeUseCaseTest {
     }
 
     @Test
-    void givenNonExistentEmail_whenSendRecoveryCode_thenThrowsNotFoundException() {
+    void given_NonExistentEmail_when_SendRecoveryCode_thenThrowsNotFoundException() {
         String email = "nonexistent@example.com";
 
         when(userRecoveryCodeRepository.findByEmail(email)).thenReturn(Optional.empty());
@@ -186,5 +188,25 @@ class UserTypeUseCaseTest {
 
         verify(mailIntegration, never()).send(anyString(), anyString(), anyString());
         verify(userRecoveryCodeRepository, never()).save(any(UserRecoveryCode.class));
+    }
+
+    @Test
+    void given_recoveryCodeIsValid_when_shouldUserIsFound_then_returnTrue() {
+        ReflectionTestUtils.setField(userDetailsUseCase, "recoveryCodeTimeout", "5");
+        when(userRecoveryCodeRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(getUserRecoveryCode()));
+        Assertions.assertTrue(userDetailsUseCase.recoveryCodeIsValid("4444", user.getEmail()));
+
+        verify(userRecoveryCodeRepository, times(1)).findByEmail(user.getEmail());
+    }
+
+    @Test
+    void given_recoveryCodeIsValid_when_shouldUserIsNotFound_then_returnFalse() {
+        ReflectionTestUtils.setField(userDetailsUseCase, "recoveryCodeTimeout", "5");
+        when(userRecoveryCodeRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
+        Assertions.assertThrows(NotFoundException.class, () -> userDetailsUseCase.recoveryCodeIsValid("4444", user.getEmail()));
+    }
+
+    private UserRecoveryCode getUserRecoveryCode() {
+        return new UserRecoveryCode(UUID.randomUUID().toString(), user.getName(), "4444", LocalDateTime.now());
     }
 }
