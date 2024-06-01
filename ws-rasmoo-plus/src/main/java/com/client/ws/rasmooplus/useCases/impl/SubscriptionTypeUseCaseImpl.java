@@ -7,6 +7,7 @@ import com.client.ws.rasmooplus.presentation.dto.SubscriptionTypeDTO;
 import com.client.ws.rasmooplus.useCases.factory.SubscriptionTypeFactory;
 import com.client.ws.rasmooplus.infra.repositories.jpa.SubscriptionTypeRepository;
 import com.client.ws.rasmooplus.useCases.SubscriptionTypeUseCase;
+import jakarta.validation.Valid;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class SubscriptionTypeUseCaseImpl implements SubscriptionTypeUseCase {
 
     @Override
     @CacheEvict(value = "subscriptionType", allEntries = true)
-    public SubscriptionsTypeEntity update(Long id, SubscriptionTypeDTO subscriptionTypeDTO) {
+    public SubscriptionsTypeEntity update(@Valid Long id, SubscriptionTypeDTO subscriptionTypeDTO) {
         getSubscriptionTypeById(id);
         subscriptionTypeDTO.setSubscriptionsTypeId(id);
         return subscriptionTypeRepository.save(SubscriptionTypeFactory.fromDtoToEntity(subscriptionTypeDTO));
