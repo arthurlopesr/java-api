@@ -10,13 +10,21 @@ import com.client.ws.rasmooplus.presentation.dto.UserDTO;
 import com.client.ws.rasmooplus.useCases.UserUseCase;
 import com.client.ws.rasmooplus.useCases.factory.UserFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class UserUseCaseImpl implements UserUseCase {
+
+    private static final String PNG = ".png";
+
+    private static final String JPEG = ".jpeg";
+
+    private static final String WEBP = ".webp";
 
     private final UserRepository userRepository;
 
@@ -67,6 +75,33 @@ public class UserUseCaseImpl implements UserUseCase {
     public void delete(Long id) {
         getUserBYId(id);
         userRepository.deleteById(id);
+    }
+
+    public UserEntity uploadPhoto(Long id, MultipartFile file) throws IOException {
+        String imgName = file.getOriginalFilename();
+        String formatPNG = imgName.substring(imgName.length() - 4);
+        String formatJPEG = imgName.substring(imgName.length() - 5);
+        String formatWEBP = imgName.substring(imgName.length() - 5);
+
+        if (!(PNG.equalsIgnoreCase(formatPNG) || JPEG.equalsIgnoreCase(formatJPEG) || WEBP.equalsIgnoreCase(formatWEBP))) {
+            throw new BadRequestException("Invalid image format");
+        }
+
+        UserEntity user = getUserBYId(id);
+        user.setPhotoName(file.getOriginalFilename());
+        user.setPhoto(file.getBytes());
+        return userRepository.save(user);
+    }
+
+    @Override
+    public byte[] downloadPhoto(Long id) {
+        UserEntity user = findById(id);
+
+        if (Objects.isNull(user.getPhoto())) {
+            throw new BadRequestException("User don't have photo");
+        }
+
+        return user.getPhoto();
     }
 
     private UserEntity getUserBYId(Long id) {

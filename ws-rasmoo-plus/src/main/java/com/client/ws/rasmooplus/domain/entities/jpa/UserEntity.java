@@ -39,6 +39,11 @@ public class UserEntity implements Serializable {
     @Column(name = "dt_expiration")
     private LocalDate dtExpiration = LocalDate.now();
 
+    @Column(name = "photo_name")
+    private String photoName;
+
+    private byte[] photo;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_type_id")
     private UserTypeEntity userType;

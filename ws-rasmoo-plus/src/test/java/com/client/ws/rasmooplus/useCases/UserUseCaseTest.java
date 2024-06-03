@@ -16,7 +16,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -186,5 +189,44 @@ class UserUseCaseTest {
         userUseCase.delete(user.getUserId());
         verify(userRepository, times(1)).findById(user.getUserId());
         verify(userRepository, times(1)).deleteById(user.getUserId());
+    }
+
+    @Test
+    void given_uploadPhoto_thereIsUserAndFileAndItsPNGorJPEG_then_updatePhotoAndReturnUser() throws Exception {
+        FileInputStream fis = new FileInputStream("src/test/resources/static/test_image.webp");
+        MockMultipartFile file = new MockMultipartFile("file", "test_image.webp", MediaType.MULTIPART_FORM_DATA_VALUE, fis);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        UserEntity userReturned = userUseCase.uploadPhoto(1L, file);
+        Assertions.assertNotNull(userReturned);
+        Assertions.assertNotNull(userReturned.getPhoto());
+        Assertions.assertEquals("test_image.webp", userReturned.getPhotoName());
+
+        verify(userRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void given_uploadPhoto_thereIsUserAndFileAndItsNotPNGorJPEG_then_throwsBadRequestException() throws Exception {
+        FileInputStream fis = new FileInputStream("src/test/resources/static/test_image.webp");
+        MockMultipartFile file = new MockMultipartFile("file", "null_image.txt", MediaType.MULTIPART_FORM_DATA_VALUE, fis);
+
+        Assertions.assertThrows(BadRequestException.class, () -> userUseCase.uploadPhoto(1L, file));
+
+        verify(userRepository, times(0)).findById(any());
+    }
+
+    @Test
+    void given_downloadPhoto_thereIsUserPhoto_then_returnByteArray() throws Exception {
+        user.setPhoto(new byte[0]);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Assertions.assertNotNull(userUseCase.downloadPhoto(1L));
+        verify(userRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void given_downloadPhoto_thereIsDontHavePhoto_then_returnBadRequestException() throws Exception {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Assertions.assertThrows(BadRequestException.class, () -> userUseCase.downloadPhoto(1L));
+        verify(userRepository, times(1)).findById(1L);
     }
 }
